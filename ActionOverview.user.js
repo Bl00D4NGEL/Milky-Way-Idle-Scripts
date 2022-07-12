@@ -85,8 +85,8 @@ const actionCompletedCallback = data => {
     const experienceRequiredForNextLevel = getRequiredExperienceUntilNextLevel(currentExperience);
     const actionsForNextLevel = experienceRequiredForNextLevel / experienceGainPerAction;
     // If an action is skipped we can ignore it for "total actions required to level up"
-    // 20% skill boost for 100 actions = 80 actions to get exp of 100 actions
-    const actualActionsForNextLevel = actionsForNextLevel * (1 - skillBoost);
+    // 20% skill boost for 100 actions = 83.33 actions to get exp of 100 actions
+    const actualActionsForNextLevel = actionsForNextLevel / (1 + skillBoost);
 
     infos.push(
         [
@@ -102,7 +102,7 @@ const actionCompletedCallback = data => {
     if (leftOverActions !== -1) {
         const leftOverActionTime = leftOverActions * actionTimeInSeconds;
         const skippedActions = Math.round(leftOverActions * skillBoost);
-        const leftOverActionTimeAfterSkillBoost = leftOverActionTime * (1 - skillBoost);
+        const leftOverActionTimeAfterSkillBoost = leftOverActionTime / (1 + skillBoost);
         const totalExperienceGained = experienceGainPerAction * leftOverActions;
 
         infos.push(
