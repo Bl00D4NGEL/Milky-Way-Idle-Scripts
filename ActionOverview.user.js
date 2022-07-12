@@ -6,7 +6,7 @@
 // @updateURL        https://github.com/Bl00D4NGEL/Milky-Way-Idle-Scripts/raw/main/ActionOverview.user.js
 // @downloadURL      https://github.com/Bl00D4NGEL/Milky-Way-Idle-Scripts/raw/main/ActionOverview.user.js
 // @description      Adds a small overview of the current action/s
-// @version          0.1.1
+// @version          0.1.2
 // ==/UserScript==
 
 const nativeWebSocket = window.WebSocket;
@@ -81,20 +81,21 @@ const actionCompletedCallback = data => {
 
     const experienceGainPerAction = window.clientInfo.actionDetailMap[currentAction.actionHrid].experienceGain.value;
     const actionsPerHour = Math.round(3600 / actionTimeInSeconds);
+    const actionsPerHourWithSkillBoost = actionsPerHour * (1 + skillBoost);
 
     const experienceRequiredForNextLevel = getRequiredExperienceUntilNextLevel(currentExperience);
     const actionsForNextLevel = experienceRequiredForNextLevel / experienceGainPerAction;
     // If an action is skipped we can ignore it for "total actions required to level up"
     // 20% skill boost for 100 actions = 83.33 actions to get exp of 100 actions
-    const actualActionsForNextLevel = actionsForNextLevel / (1 + skillBoost);
+    const actionsForNextLevelWithSkillBoost = actionsForNextLevel / (1 + skillBoost);
 
     infos.push(
         [
             `If you continue your current action for an hour you will be ...`,
             ` ... completing about ${actionsPerHour.toLocaleString()} actions`,
             ` ... skipping about ${Math.round(actionsPerHour * skillBoost).toLocaleString()} actions`,
-            ` ... gaining about ${(experienceGainPerAction * actionsPerHour).toLocaleString()} experience`,
-            `It will take you about ${secondsToHms(actualActionsForNextLevel * actionTimeInSeconds)} for the next level.`,
+            ` ... gaining about ${(experienceGainPerAction * actionsPerHourWithSkillBoost).toLocaleString()} experience`,
+            `It will take you about ${secondsToHms(actionsForNextLevelWithSkillBoost * actionTimeInSeconds)} for the next level.`,
         ]
     );
 
@@ -102,12 +103,12 @@ const actionCompletedCallback = data => {
     if (leftOverActions !== -1) {
         const leftOverActionTime = leftOverActions * actionTimeInSeconds;
         const skippedActions = Math.round(leftOverActions * skillBoost);
-        const leftOverActionTimeAfterSkillBoost = leftOverActionTime / (1 + skillBoost);
+        const leftOverActionTimeWithSkillBoost = leftOverActionTime / (1 + skillBoost);
         const totalExperienceGained = experienceGainPerAction * leftOverActions;
 
         infos.push(
             [
-                `Current actions should take ${secondsToHms(leftOverActionTimeAfterSkillBoost)} (including skipped actions).`,
+                `Current actions should take ${secondsToHms(leftOverActionTimeWithSkillBoost)} (including skipped actions).`,
                 `In total you will be ...`,
                 ` ... skipping about ${skippedActions.toLocaleString()} actions`,
                 ` ... gaining ${totalExperienceGained.toLocaleString()} experience`,
