@@ -75,7 +75,7 @@ const actionCompletedCallback = data => {
         [
             `Current action: [${skillHridToName(currentSkill.skillHrid)}] -> [${actionHridToName(currentAction.actionHrid)}]`,
             `Current time per action: ${actionTimeInSeconds.toFixed(2)} seconds.`,
-            `Current skill boost: ${skillBoost * 100}%.`,
+            `Current skill boost: ${(skillBoost * 100).toFixed(2)}%.`,
         ]
     ];
 
