@@ -1,14 +1,16 @@
 // ==UserScript==
-// @name             Milky way
+// @name             Milky way action overview
 // @match            https://www.milkywayidle.com/game
 // @run-at           document-start
 // @grant            none
-// @description      Adds a small overview of the current action
+// @updateURL        https://github.com/Bl00D4NGEL/Milky-Way-Idle-Scripts/raw/main/action-overview.js
+// @downloadURL      https://github.com/Bl00D4NGEL/Milky-Way-Idle-Scripts/raw/main/action-overview.js
+// @description      Adds a small overview of the current action/s
 // @version          0.1
 // ==/UserScript==
 
 const nativeWebSocket = window.WebSocket;
-window.WebSocket = function(...args){
+window.WebSocket = function (...args) {
     const socket = new nativeWebSocket(...args);
     window.milkySocket = socket;
     return socket;
@@ -84,7 +86,7 @@ const actionCompletedCallback = data => {
     const actionsForNextLevel = experienceRequiredForNextLevel / experienceGainPerAction;
     // If an action is skipped we can ignore it for "total actions required to level up"
     // 20% skill boost for 100 actions = 80 actions to get exp of 100 actions
-    const actualActionsForNextLevel = actionsForNextLevel * (1-skillBoost);
+    const actualActionsForNextLevel = actionsForNextLevel * (1 - skillBoost);
 
     infos.push(
         [
@@ -100,7 +102,7 @@ const actionCompletedCallback = data => {
     if (leftOverActions !== -1) {
         const leftOverActionTime = leftOverActions * actionTimeInSeconds;
         const skippedActions = Math.round(leftOverActions * skillBoost);
-        const leftOverActionTimeAfterSkillBoost = leftOverActionTime * (1-skillBoost);
+        const leftOverActionTimeAfterSkillBoost = leftOverActionTime * (1 - skillBoost);
         const totalExperienceGained = experienceGainPerAction * leftOverActions;
 
         infos.push(
@@ -133,7 +135,7 @@ const getLevelForExperience = experience => {
 
 const getRequiredExperienceUntilNextLevel = experience => {
     const currentLevel = getLevelForExperience(experience);
-    const experienceForNextLevel = window.clientInfo.levelExperienceTable[currentLevel+1];
+    const experienceForNextLevel = window.clientInfo.levelExperienceTable[currentLevel + 1];
     return experienceForNextLevel - experience;
 }
 
